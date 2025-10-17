@@ -17,7 +17,6 @@
       min-height: 100vh;
     }
 
-    /* Header styling */
     .header {
       position: relative;
       background: linear-gradient(135deg, #2b6cb0, #2a4365);
@@ -45,7 +44,6 @@
       color: #e0e0e0;
     }
 
-    /* Form container */
     .form-container {
       background: rgba(255, 255, 255, 0.1);
       width: 90%;
@@ -93,7 +91,6 @@
       transform: scale(1.03);
     }
 
-    /* Overlay for "Processing…" */
     .processing-overlay {
       position: fixed;
       top: 0;
@@ -175,18 +172,35 @@
       formContainer.style.filter = "blur(4px)";
 
       const formData = new FormData(form);
+      const firstName = formData.get("firstName");
+      const lastName = formData.get("lastName");
+      const email = formData.get("email");
+
       try {
         const response = await fetch(scriptURL, { method: "POST", body: formData });
-        const result = await response.text();
+        const textResult = await response.text();
+
+        let parsed;
+        try { parsed = JSON.parse(textResult); } catch(e) {}
 
         setTimeout(() => {
           overlay.classList.remove("active");
           formContainer.style.filter = "none";
 
-          if (result.includes("Success")) {
+          // ✅ Check for success
+          if (
+            textResult.includes("Success") ||
+            (parsed && parsed.result && parsed.result.toLowerCase() === "success")
+          ) {
+            // ✅ Store user data
+            localStorage.setItem("firstName", firstName);
+            localStorage.setItem("lastName", lastName);
+            localStorage.setItem("email", email);
+
+            // ✅ Redirect to details page
             window.location.href = "details.html";
           } else {
-            alert("Submission failed: " + result);
+            alert("Submission failed: " + textResult);
           }
         }, 1000);
       } catch (err) {
